@@ -8,17 +8,19 @@ public class BatchProcessor : EditorWindow {
 	private static string nameContains = "";
 	private static string nameDoesNotContain = "";
 	private static Component comp;
+	
 	private static GameObject addThisGameObject;
 	private static Object addThisComponent;
 	private static Component modifyThisComponent;
 	private static Component rememberModifyThisComponent;
+	
 	private static List<string> fieldNames = new List<string>();
 	private static List<System.Type> fieldType = new List<System.Type>();
 	private static ArrayList fieldValue = new ArrayList();
 	private static List<bool> applyValue = new List<bool>();
 	
-	private static List<GameObject> found = new List<GameObject>();
-	private static List<GameObject> done = new List<GameObject>();
+	private static List<GameObject> found = new List<GameObject>(); //holds the current result of the FINDing/FILTERing, as shown in the FOUND section
+	private static List<GameObject> done = new List<GameObject>(); //processed objects, as shown in the DONE section
 	
 	private static Vector2 scrollPos = Vector2.zero;
 	private static Vector2 scrollPos2 = Vector2.zero;
@@ -32,6 +34,8 @@ public class BatchProcessor : EditorWindow {
 	
 	
 	void OnGUI() {
+		
+		//BUILD THE EDITOR WINDOW GUI
 		
 		EditorGUILayout.BeginHorizontal();
 		
@@ -95,7 +99,7 @@ public class BatchProcessor : EditorWindow {
 			    }
 			}
 		}
-		if(modifyThisComponent != null) {
+		if(modifyThisComponent != null) { //show fields for current component. still some work to do here to support everything...
 			for(int i = 0; i < fieldNames.Count; i++) {
 				if(fieldType[i] == typeof(string) || fieldType[i] == typeof(int) || fieldType[i] == typeof(float) || fieldType[i] == typeof(bool) || fieldType[i] == typeof(Vector3) || fieldType[i] == typeof(Vector2) || fieldType[i] == typeof(Rect) || fieldType[i] == typeof(Color) || fieldType[i] == typeof(GameObject) || fieldType[i] == typeof(Transform) || fieldType[i] == typeof(Material) || fieldType[i] == typeof(Mesh)) {
 					EditorGUILayout.BeginHorizontal();
@@ -163,7 +167,8 @@ public class BatchProcessor : EditorWindow {
 		done.Clear();
 	}
 	
-	void Find() {
+	
+	void Find() { //FIND GameObjects in the scene that match the criterias the user has set
 		found.Clear();
 		if(nameContains != "") {
 			GameObject[] gos = FindObjectsOfType(typeof(GameObject)) as GameObject[];
@@ -173,7 +178,14 @@ public class BatchProcessor : EditorWindow {
 				}
 			}
 		}
-		if(nameDoesNotContain != "") {
+		if(nameContains == "" && nameDoesNotContain != "") { //nameContains empty, but nameDoeNotContain not? Add matching!
+			GameObject[] gos = FindObjectsOfType(typeof(GameObject)) as GameObject[];
+			foreach(GameObject g in gos) {
+				if(!g.name.Contains(nameDoesNotContain)) {
+					if(!found.Contains(g)) found.Add(g);
+				}
+			}			
+		} else if(nameDoesNotContain != "") {
 			List<GameObject> removeFromList = new List<GameObject>();
 			foreach(GameObject g in found) {
 				if(g.name.Contains(nameDoesNotContain)) removeFromList.Add(g);
@@ -196,7 +208,7 @@ public class BatchProcessor : EditorWindow {
 	}
 	
 	
-	void Filter() {
+	void Filter() { //FILTER the current selection
 		if(nameContains != "") {
 			List<GameObject> removeFromList = new List<GameObject>();
 			foreach(GameObject g in found) {
