@@ -21,17 +21,17 @@ Example
 
 If you want to see what the script can do, follow these steps:
 
-Open the project in Unity
-Open the scene TEST
-Window > BatchProcessor
-Enter "Cube" into the "Name must contain" field and Click "Find"
-Select "Small Cube 1" and drag the SelfDestructInSec component (click and drag the bold title in the inspector) into the "Has Component" field - click "Filter"
+* Open the project in Unity
+* Open the scene TEST
+* Window > BatchProcessor
+* Enter "Cube" into the "Name must contain" field and Click "Find"
+* Select "Small Cube 1" and drag the SelfDestructInSec component (click and drag the bold title in the inspector) into the "Has Component" field - click "Filter"
 
 You now have a selection of all GameObjects that have "Cube" in their name and hold a SelfDestructInSec component.
 
-Drag the SelfDestructInSec component into the "Modify Component" field in the "DO" section, check the "sec" checkbox and set it to 3
-Drag and drop the Rotate script from the Project pane into the "AddThis" field.
-Click "Process"
+* Drag the SelfDestructInSec component into the "Modify Component" field in the "DO" section, check the "sec" checkbox and set it to 3
+* Drag and drop the Rotate script from the Project pane into the "AddThis" field.
+* Click "Process"
 
 A list of all the modified objects appears in the "DONE" section. All gameObjects that have Cube in their name and held a SelfDestructInSec component had a Rotate component added and the sec value of the SelfDestructInSec component has been changed to 3.
 
